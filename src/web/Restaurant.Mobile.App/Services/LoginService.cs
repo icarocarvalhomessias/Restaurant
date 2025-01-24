@@ -10,16 +10,16 @@ namespace Restaurant.Mobile.App.Services
     public class LoginService : ILoginService
     {
 
-        private readonly IAuthHttpClient _authHttpClient;
+        private readonly IRestaurantHttpClient _restaurantHttpClient;
 
-        public LoginService(IAuthHttpClient authHttpClient)
+        public LoginService(IRestaurantHttpClient restaurantHttp)
         {
-            _authHttpClient = authHttpClient;
+            _restaurantHttpClient = restaurantHttp;
         }
 
         public async Task<bool> LoginAsync(string username, string password)
         {
-            var response = await _authHttpClient.LoginAsync(username, password);
+            var response = await _restaurantHttpClient.LoginAsync(username, password);
             return response.ResponseResult.Errors.Mensagens.Count() == 0;
         }
     }

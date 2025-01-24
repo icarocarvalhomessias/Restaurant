@@ -21,7 +21,7 @@ namespace Restaurant.Mobile.App
                 });
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             RegisterServices(builder);
@@ -34,7 +34,7 @@ namespace Restaurant.Mobile.App
             mauiAppBuilder.Services.AddHttpContextAccessor();
             mauiAppBuilder.Services.AddTransient<IAspNetUser, AspNetUser>();
 
-            mauiAppBuilder.Services.AddTransient<IAuthHttpClient, AuthHttpClient>();
+            mauiAppBuilder.Services.AddTransient<IRestaurantHttpClient, AuthHttpClient>();
             mauiAppBuilder.Services.AddTransient<ILoginService, LoginService>();
 
             mauiAppBuilder.Services.AddTransient<UserService>();
@@ -42,7 +42,10 @@ namespace Restaurant.Mobile.App
             mauiAppBuilder.Services.AddTransient<MainPage>();
             mauiAppBuilder.Services.AddTransient<LoginPage>();
 
+            mauiAppBuilder.Services.AddTransient<RelatoriosPage>();
+            mauiAppBuilder.Services.AddTransient<RelatoriosViewModel>();
 
+            mauiAppBuilder.Services.AddTransient<IOrderService, OrderService>();
             return mauiAppBuilder;
         }
     }

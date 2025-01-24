@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Restaurant.Auth.Data;
+using Restaurant.API.Data;
 
 #nullable disable
 
-namespace Restaurant.Auth.Migrations
+namespace Restaurant.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250121131332_Initial")]
-    partial class Initial
+    [Migration("20250121141833_Roles")]
+    partial class Roles
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

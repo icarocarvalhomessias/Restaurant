@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Restaurant.Auth.Data;
+using Restaurant.API.Data;
+using Restaurant.API.Data.Repositories;
+using Restaurant.API.Services;
+using Restaurant.API.Services.Interfaces;
 using Restaurant.WebApi.Core.Identity;
 
-namespace Restaurant.Auth.Configuration
+namespace Restaurant.API.Configuration
 {
     public static class ApiConfig
     {
@@ -24,9 +27,21 @@ namespace Restaurant.Auth.Configuration
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddControllers();
+            services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+                options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+            });
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductService, ProductService>();
+
 
             services.AddSwaggerConfiguration();
 

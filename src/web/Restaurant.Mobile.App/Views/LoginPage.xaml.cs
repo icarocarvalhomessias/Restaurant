@@ -10,10 +10,10 @@ namespace Restaurant.Mobile.App.Views;
 public partial class LoginPage : ContentPage
 {
     private MainPage _mainPage;
-    private IAuthHttpClient _authHttpClient;
+    private IRestaurantHttpClient _authHttpClient;
     private UserService _UserService;
 
-    public LoginPage(MainPage mainPage, IAuthHttpClient authHttpClient, UserService userService)
+    public LoginPage(MainPage mainPage, IRestaurantHttpClient authHttpClient, UserService userService)
 	{
         _mainPage = mainPage;
         _authHttpClient = authHttpClient;
@@ -51,6 +51,12 @@ public partial class LoginPage : ContentPage
             ErrorMessage.Text = "Invalid email or password.";
             ErrorMessage.IsVisible = true;
         }
+    }
+
+    private void OnPasswordEntryCompleted(object sender, EventArgs e)
+    {
+        // Chama o método de clique do botão de login
+        OnLoginClicked(sender, e);
     }
 
     private async Task<bool> PerformLogin(string email, string password)

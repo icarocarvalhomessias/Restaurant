@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using System.ComponentModel;
-using Microsoft.Maui.Storage;
+﻿using System.ComponentModel;
+using System.Windows.Input;
 using Restaurant.Mobile.App.Services;
+using Restaurant.Mobile.App.Views;
 
 namespace Restaurant.Mobile.App.ViewModels
 {
@@ -10,7 +10,7 @@ namespace Restaurant.Mobile.App.ViewModels
         private string _userName;
         private string _userType;
         private readonly UserService _userService;
-
+        private readonly RelatoriosPage _relatoriosPage;
         public string UserName
         {
             get => _userName;
@@ -29,20 +29,29 @@ namespace Restaurant.Mobile.App.ViewModels
             get => _userType;
             set
             {
-                if (_userType != value)
-                {
-                    _userType = value;
-                    OnPropertyChanged(nameof(UserType));
-                }
+                _userType = value;
+                OnPropertyChanged(nameof(UserType));
+                OnPropertyChanged(nameof(IsAdmin));
             }
         }
+
+        public bool IsAdmin => UserType == "Admin";
+
+        public string CurrentDate => DateTime.Now.ToString("dd/MM/yyyy");
+
+        public ICommand NavigateToEstoqueCommand { get; }
+        public ICommand NavigateToNovoPedidoCommand { get; }
+        public ICommand NavigateToRelatoriosCommand { get; }
+        public ICommand NavigateToHomeCommand { get; }
+        public ICommand NavigateToMinhasEntregasCommand { get; }
 
         public MainPageViewModel(UserService userService)
         {
             _userService = userService;
+            LoadUserData();
         }
 
-        public async Task LoadUserDataAsync()
+        private async void LoadUserData()
         {
             var token = await _userService.GetUserTokenAsync();
             if (!string.IsNullOrEmpty(token))

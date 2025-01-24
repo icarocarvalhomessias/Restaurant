@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Restaurant.Auth.Migrations
+namespace Restaurant.API.Migrations
 {
     /// <inheritdoc />
     public partial class Roles : Migration

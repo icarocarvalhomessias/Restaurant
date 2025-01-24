@@ -1,4 +1,4 @@
-using Restaurant.Auth.Configuration;
+using Restaurant.API.Configuration;
 
 public class Program
 {

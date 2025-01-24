@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace Mobile.App.HttpClients
 {
-    internal class AuthHttpClient : HttpService, IAuthHttpClient
+    internal class AuthHttpClient : HttpService, IRestaurantHttpClient
     {
         private readonly HttpClient _httpClient;
 
@@ -13,10 +13,16 @@ namespace Mobile.App.HttpClients
         {
             _httpClient = new HttpClient
             {
-                BaseAddress = new Uri("http://localhost:5263/api/auth/authenticate")
+                BaseAddress = new Uri("http://localhost:5263/api/")
             };
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        }
+
+        public async Task<HttpResponseMessage> GetAsync(string uri)
+        {
+            var url = new Uri($"http://localhost:5263/api/{uri}");
+            return await _httpClient.GetAsync(url);
         }
 
         public async Task<UserResponseLogin> LoginAsync(string email, string password)

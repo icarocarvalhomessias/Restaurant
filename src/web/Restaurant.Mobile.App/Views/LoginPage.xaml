@@ -36,7 +36,8 @@
                 Placeholder="Password"
                 IsPassword="True"
                 Text="{Binding Password}"
-                HorizontalOptions="FillAndExpand" />
+                HorizontalOptions="FillAndExpand"
+                Completed="OnPasswordEntryCompleted" />
 
             <Button
                 Text="Login"

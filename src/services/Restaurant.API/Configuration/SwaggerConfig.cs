@@ -1,6 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
 
-namespace Restaurant.Auth.Configuration
+namespace Restaurant.API.Configuration
 {
     public static class SwaggerConfig
     {
