@@ -10,7 +10,7 @@ namespace Restaurant.API.Configuration
             {
                 c.SwaggerDoc("v1", new OpenApiInfo()
                 {
-                    Title = "Restaurant Identity API",
+                    Title = "Restaurant API",
                     Description = "",
                     Contact = new OpenApiContact() { Name = "Icaro Carvalho", Email = "icarusdev12@gmail.com" },
                     License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }

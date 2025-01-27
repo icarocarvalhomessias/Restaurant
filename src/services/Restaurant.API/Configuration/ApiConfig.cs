@@ -11,7 +11,6 @@ namespace Restaurant.API.Configuration
 {
     public static class ApiConfig
     {
-
         public static IServiceCollection AddApiConfiguration(this IServiceCollection services, ConfigurationManager configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -20,38 +19,61 @@ namespace Restaurant.API.Configuration
             services.AddHttpContextAccessor();
             services.AddScoped<AuthenticationService>();
 
+            ConfigureAppSettings(services, configuration);
+            ConfigureIdentity(services);
+            ConfigureControllers(services);
+            ConfigureSwagger(services);
+            ConfigureAuthorization(services);
+            ConfigureDependencies(services);
+
+            return services;
+        }
+
+        private static void ConfigureAppSettings(IServiceCollection services, ConfigurationManager configuration)
+        {
             var appSettingsSection = configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
+        }
 
+        private static void ConfigureIdentity(IServiceCollection services)
+        {
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+        }
 
+        private static void ConfigureControllers(IServiceCollection services)
+        {
             services.AddControllers()
-            .AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
-                options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
-            });
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+                    options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+                });
             services.AddEndpointsApiExplorer();
+        }
+
+        private static void ConfigureSwagger(IServiceCollection services)
+        {
             services.AddSwaggerGen();
-
-            services.AddScoped<IOrderService, OrderService>();
-            services.AddScoped<IOrderRepository, OrderRepository>();
-
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<IProductService, ProductService>();
-
-
             services.AddSwaggerConfiguration();
+        }
 
+        private static void ConfigureAuthorization(IServiceCollection services)
+        {
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("AdminPolicy", policy => policy.RequireRole("admin"));
                 options.AddPolicy("DeliveryManPolicy", policy => policy.RequireRole("DeliveryMan"));
             });
+        }
 
-            return services;
+        private static void ConfigureDependencies(IServiceCollection services)
+        {
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductService, ProductService>();
         }
 
         public static IApplicationBuilder UseApiConfiguration(this IApplicationBuilder app, IWebHostEnvironment env)
@@ -64,12 +86,9 @@ namespace Restaurant.API.Configuration
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseCors("AllowAll");
 
             app.UseEndpoints(endpoints =>
