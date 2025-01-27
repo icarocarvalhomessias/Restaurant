@@ -28,7 +28,7 @@
         <!-- Buttons -->
         <VerticalStackLayout Grid.Row="1" Padding="10" Spacing="10">
             <Button Text="Estoque" Command="{Binding NavigateToEstoqueCommand}" IsVisible="{Binding IsAdmin}" />
-            <Button Text="Novo Pedido" Command="{Binding NavigateToNovoPedidoCommand}" IsVisible="{Binding IsAdmin}" />
+            <Button Text="Novo Pedido" Clicked="Button_Clicked_1"  IsVisible="{Binding IsAdmin}" />
             <Button Text="Relatórios" Clicked="Button_Clicked" IsVisible="{Binding IsAdmin}" />
             <Button Text="Minhas Entregas" Command="{Binding NavigateToMinhasEntregasCommand}" />
         </VerticalStackLayout>
@@ -45,7 +45,7 @@
             <Button Text="Home" Grid.Column="0" Command="{Binding NavigateToHomeCommand}" />
             <Button Text="Estoque" Grid.Column="1" Command="{Binding NavigateToEstoqueCommand}" IsVisible="{Binding IsAdmin}" />
             <Button Text="Relatórios" Grid.Column="2" Clicked="Button_Clicked" IsVisible="{Binding IsAdmin}" />
-            <Button Text="Novo Pedido" Grid.Column="3" Command="{Binding NavigateToNovoPedidoCommand}" IsVisible="{Binding IsAdmin}" />
+            <Button Text="Novo Pedido" Grid.Column="3" Clicked="Button_Clicked_1" IsVisible="{Binding IsAdmin}" />
             <Button Text="Minhas Entregas" Grid.Column="4" Command="{Binding NavigateToMinhasEntregasCommand}" />
         </Grid>
     </Grid>

@@ -15,7 +15,9 @@ public class ProductRepository : IProductRepository
 
     public async Task<IEnumerable<Product>> GetAllProductsAsync()
     {
-        return await _context.Products.AsNoTracking().ToListAsync();
+        return await _context.Products
+            .Where(p => p.Active)
+            .AsNoTracking().ToListAsync();
     }
 
     public async Task<Product> GetProductByIdAsync(Guid id)
@@ -32,12 +34,6 @@ public class ProductRepository : IProductRepository
     public async Task<bool> UpdateProductAsync(Product product)
     {
         _context.Products.Update(product);
-        return await _context.SaveChangesAsync() > 0;
-    }
-
-    public async Task<bool> DeleteProductAsync(Product product)
-    {
-        _context.Products.Remove(product);
         return await _context.SaveChangesAsync() > 0;
     }
 }

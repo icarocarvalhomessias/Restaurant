@@ -46,14 +46,6 @@ public class AuthController : MainController
 
         if (results.Succeeded)
         {
-            //var familiarResult = await RegistrarUsuario(userRegistration);
-
-            //if (!familiarResult.ValidationResult.IsValid)
-            //{
-            //    await _userManager.DeleteAsync(user);
-            //    return CustomResponse(familiarResult.ValidationResult);
-            //}
-
             var role = userRegistration.TypeUser == TypeUser.Admin ? "Admin" : "DeliveryMan";
             await _userManager.AddToRoleAsync(user, role);
 
@@ -101,7 +93,6 @@ public class AuthController : MainController
         claims.Add(new Claim(JwtRegisteredClaimNames.Sub, user.Id));
         claims.Add(new Claim(JwtRegisteredClaimNames.Email, user.UserName));
         claims.Add(new Claim(JwtRegisteredClaimNames.Name, user.Email));
-        claims.Add(new Claim("UserName", user.Email));
         claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
         claims.Add(new Claim(JwtRegisteredClaimNames.Nbf, ToUnixEpochDate(DateTime.UtcNow).ToString()));
         claims.Add(new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(DateTime.UtcNow).ToString(), ClaimValueTypes.Integer64));
