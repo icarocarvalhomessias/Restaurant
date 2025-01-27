@@ -41,11 +41,14 @@ namespace Restaurant.Mobile.App
             mauiAppBuilder.Services.AddTransient<MainPageViewModel>();
             mauiAppBuilder.Services.AddTransient<MainPage>();
             mauiAppBuilder.Services.AddTransient<LoginPage>();
+            mauiAppBuilder.Services.AddTransient<NewOrderPage>();
 
             mauiAppBuilder.Services.AddTransient<RelatoriosPage>();
             mauiAppBuilder.Services.AddTransient<RelatoriosViewModel>();
 
             mauiAppBuilder.Services.AddTransient<IOrderService, OrderService>();
+            mauiAppBuilder.Services.AddTransient<IProductService, ProductService>();
+
             return mauiAppBuilder;
         }
     }

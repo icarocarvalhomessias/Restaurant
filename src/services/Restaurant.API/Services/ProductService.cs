@@ -34,6 +34,7 @@ public class ProductService : IProductService
 
     public async Task<bool> DeleteProductAsync(Product product)
     {
-        return await _productRepository.DeleteProductAsync(product);
+        product.Deactivate();
+        return await _productRepository.UpdateProductAsync(product);
     }
 }

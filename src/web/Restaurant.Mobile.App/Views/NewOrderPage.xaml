@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Restaurant.Mobile.App.Views.NewOrderPage"
+             Title="New Order">
+
+    <ContentPage.Content>
+        <StackLayout Padding="10">
+            <Label Text="New Order" 
+                   FontSize="Large" 
+                   HorizontalOptions="Center" 
+                   VerticalOptions="Start" />
+
+            <Entry x:Name="ClientNameEntry" 
+                   Placeholder="Client Name" 
+                   VerticalOptions="CenterAndExpand" />
+
+            <Entry x:Name="ClientAddressEntry" 
+                   Placeholder="Client Address" 
+                   VerticalOptions="CenterAndExpand" />
+
+            <Entry x:Name="ClientPhoneEntry" 
+                   Placeholder="Client Phone" 
+                   VerticalOptions="CenterAndExpand" />
+
+            <SearchBar x:Name="ProductSearchBar" 
+                       Placeholder="Search Products" 
+                       VerticalOptions="CenterAndExpand" 
+                       TextChanged="OnProductSearchTextChanged" />
+
+            <CollectionView x:Name="ProductCollectionView" 
+                            SelectionMode="Multiple" 
+                            VerticalOptions="CenterAndExpand">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Label Text="{Binding Name}" />
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Button Text="Submit Order" 
+                    VerticalOptions="End" 
+                    Clicked="OnSubmitOrderClicked" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

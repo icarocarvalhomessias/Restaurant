@@ -8,5 +8,4 @@ public interface IProductRepository
     Task<Product> GetProductByIdAsync(Guid id);
     Task<bool> AddProductAsync(Product product);
     Task<bool> UpdateProductAsync(Product product);
-    Task<bool> DeleteProductAsync(Product product);
 }

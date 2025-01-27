@@ -23,6 +23,15 @@ namespace Restaurant.Mobile.App.Models
         {
             Products = new List<ProductModel>();
         }
+
+        public string StatusDescription => OrderStatus switch
+        {
+            OrderStatus.Created => "Criado",
+            OrderStatus.InProgress => "Em andamento",
+            OrderStatus.Delivered => "Entregue",
+            OrderStatus.Canceled => "Cancelado",
+            _ => "Desconhecido"
+        };
     }
 
     public class ProductModel
