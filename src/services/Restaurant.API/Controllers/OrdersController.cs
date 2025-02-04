@@ -7,11 +7,11 @@ using Restaurant.WebApi.Core.Controller;
 namespace Restaurant.API.Controllers;
 
 [Route("api/[controller]")]
-public class OrderController : MainController
+public class OrdersController : MainController
 {
     private readonly IOrderService _orderService;
 
-    public OrderController(IOrderService orderService)
+    public OrdersController(IOrderService orderService)
     {
         _orderService = orderService;
     }
@@ -31,29 +31,43 @@ public class OrderController : MainController
     [HttpPost]
     public async Task<ActionResult> AddOrder(OrderInput orderInput)
     {
-        var order = new Order(orderInput.ClientName, orderInput.ClientAddress, orderInput.ClientPhone, orderInput.ProductIds);
+        var products = orderInput.Products.ToDictionary(x => x.ProductId, x => x.Quantity);
+        var result = await _orderService.AddOrderAsync(
+            orderInput.ClientName,
+            orderInput.ClientAddress,
+            orderInput.ClientPhone,
+            products,
+            orderInput.UsuarioId
+        );
 
-        var result = await _orderService.AddOrderAsync(order);
         if (!result)
         {
             return BadRequest();
         }
-        return CreatedAtAction(nameof(GetOrderById), new { id = order.Id }, order);
+
+        return Ok();
     }
 
-    [HttpPut]
-    public async Task<IActionResult> UpdateOrder(Order order)
+    [HttpPut("{orderId}")]
+    public async Task<IActionResult> UpdateOrder(Guid orderId, OrderInput orderInput)
     {
-        if (await _orderService.UpdateAsync(order))
+        var products = orderInput.Products.ToDictionary(x => x.ProductId, x => x.Quantity);
+        if (await _orderService.UpdateOrderAsync(orderId, orderInput.ClientName, orderInput.ClientAddress, orderInput.ClientPhone, products, orderInput.UsuarioId))
         {
             return Ok();
         }
         return BadRequest();
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> DeleteOrder(Order order)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteOrder(Guid id)
     {
+        var order = await _orderService.GetOrderByIdAsync(id);
+        if (order == null)
+        {
+            return NotFound();
+        }
+
         if (await _orderService.DeleteOrderAsync(order))
         {
             return Ok();

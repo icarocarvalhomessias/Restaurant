@@ -2,14 +2,15 @@
 using Restaurant.API.Controllers.Inputs;
 using Restaurant.API.Models;
 using Restaurant.API.Services.Interfaces;
+using Restaurant.WebApi.Core.Controller;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProductController : ControllerBase
+public class ProductsController : MainController
 {
     private readonly IProductService _productService;
 
-    public ProductController(IProductService productService)
+    public ProductsController(IProductService productService)
     {
         _productService = productService;
     }

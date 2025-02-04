@@ -8,11 +8,13 @@ public class OrderService : IOrderService
 {
     private readonly IOrderRepository _orderRepository;
     private readonly IProductService _productService;
+    private readonly IUsuarioService _usuarioService;
 
-    public OrderService(IOrderRepository orderRepository, IProductService productService)
+    public OrderService(IOrderRepository orderRepository, IProductService productService, IUsuarioService usuarioService)
     {
         _orderRepository = orderRepository;
         _productService = productService;
+        _usuarioService = usuarioService;
     }
 
     public async Task<IEnumerable<Order>> GetAllOrdersAsync()
@@ -25,9 +27,76 @@ public class OrderService : IOrderService
         return await _orderRepository.GetOrderByIdAsync(id);
     }
 
-    public async Task<bool> AddOrderAsync(Order order)
+    public async Task<bool> AddOrderAsync(string clientName, string clientAddress, string clientPhone, Dictionary<Guid, int> productQuantities, Guid? usuarioId)
     {
-        // Validate client details
+        var order = Order.GenerateOrder(clientName, clientAddress, clientPhone, productQuantities);
+
+        ValidateOrder(order);
+
+        // Save the order first to get the OrderId
+        var result = await _orderRepository.AddOrderAsync(order);
+        if (!result)
+        {
+            return false;
+        }
+
+        // Now add the products to the order
+        await ValidateAndAddProducts(order, productQuantities);
+
+        return await _orderRepository.UpdateAsync(order);
+    }
+
+    public async Task<bool> UpdateOrderAsync(Guid orderId, string? clientName, string? clientAddress, string? clientPhone, Dictionary<Guid, int> productQuantities, Guid? usuarioId)
+    {
+        var existingOrder = await _orderRepository.GetOrderByIdAsync(orderId);
+        if (existingOrder == null)
+        {
+            throw new ArgumentException("Order not found.");
+        }
+
+        if (!string.IsNullOrWhiteSpace(clientName))
+        {
+            existingOrder.ClientName = clientName;
+        }
+
+        if (!string.IsNullOrWhiteSpace(clientAddress))
+        {
+            existingOrder.ClientAddress = clientAddress;
+        }
+
+        if (!string.IsNullOrWhiteSpace(clientPhone))
+        {
+            existingOrder.ClientPhone = clientPhone;
+        }
+
+        if (usuarioId.HasValue && usuarioId != Guid.Empty)
+        {
+            var usuario = await _usuarioService.GetById(usuarioId.Value);
+            if (usuario == null)
+            {
+                throw new ArgumentException("Usuario not found.");
+            }
+            existingOrder.UsuarioId = usuarioId.Value;
+        }
+        else
+        {
+            existingOrder.UsuarioId = null;
+        }
+
+        ValidateOrder(existingOrder);
+        await ValidateAndAddProducts(existingOrder, productQuantities);
+
+        return await _orderRepository.UpdateAsync(existingOrder);
+    }
+
+    public async Task<bool> DeleteOrderAsync(Order order)
+    {
+        return await _orderRepository.DeleteOrderAsync(order);
+    }
+
+
+    private void ValidateOrder(Order order)
+    {
         if (string.IsNullOrWhiteSpace(order.ClientName))
         {
             throw new ArgumentException("Client name is required.");
@@ -42,37 +111,38 @@ public class OrderService : IOrderService
         {
             throw new ArgumentException("Client phone is required.");
         }
+    }
 
-        // Validate product IDs
-        if (order.ProductIds == null || !order.ProductIds.Any())
+    private async Task ValidateAndAddProducts(Order order, Dictionary<Guid, int> productQuantities)
+    {
+        order.OrderProducts.Clear();
+        foreach (var productQuantity in productQuantities)
         {
-            throw new ArgumentException("At least one product ID is required.");
-        }
-        order.Products = new List<Product>();
+            var productId = productQuantity.Key;
+            var quantity = productQuantity.Value;
 
-        foreach (var productId in order.ProductIds)
-        {
             var product = await _productService.GetProductByIdAsync(productId);
             if (product == null || !product.Active)
             {
                 throw new ArgumentException($"Product with ID {productId} does not exist or is not active.");
             }
 
-            order.TotalValue += product.Price;
-            order.Products.Add(product);
+            var orderProduct = order.OrderProducts.FirstOrDefault(op => op.ProductId == productId);
+            if (orderProduct == null)
+            {
+                orderProduct = new OrderProduct
+                {
+                    OrderId = order.Id,
+                    ProductId = productId,
+                    Quantity = quantity
+                };
+                order.OrderProducts.Add(orderProduct);
+            }
+            else
+            {
+                orderProduct.Quantity += quantity;
+            }
         }
-
-        // Add the order
-        return await _orderRepository.AddOrderAsync(order);
     }
 
-    public async Task<bool> UpdateAsync(Order order)
-    {
-        return await _orderRepository.UpdateAsync(order);
-    }
-
-    public async Task<bool> DeleteOrderAsync(Order order)
-    {
-        return await _orderRepository.DeleteOrderAsync(order);
-    }
 }

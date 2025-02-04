@@ -26,6 +26,17 @@ namespace Restaurant.API.Configuration
             ConfigureAuthorization(services);
             ConfigureDependencies(services);
 
+            // Add CORS services
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+
             return services;
         }
 
@@ -74,6 +85,8 @@ namespace Restaurant.API.Configuration
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IUsuarioService, UsuarioService>();
         }
 
         public static IApplicationBuilder UseApiConfiguration(this IApplicationBuilder app, IWebHostEnvironment env)
@@ -87,9 +100,12 @@ namespace Restaurant.API.Configuration
 
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            // Use CORS middleware
+            app.UseCors("AllowAll");
+
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseCors("AllowAll");
 
             app.UseEndpoints(endpoints =>
             {

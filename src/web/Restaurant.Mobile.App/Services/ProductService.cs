@@ -29,35 +29,35 @@ namespace Restaurant.Mobile.App.Services
 
         public async Task<IEnumerable<ProductModel>> GetAllProductsAsync()
         {
-            var response = await _restaurantHttpClient.GetAsync("Product");
+            var response = await _restaurantHttpClient.GetAsync("Products");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<IEnumerable<ProductModel>>();
         }
 
         public async Task<ProductModel> GetProductByIdAsync(Guid id)
         {
-            var response = await _restaurantHttpClient.GetAsync($"Product/{id}");
+            var response = await _restaurantHttpClient.GetAsync($"Products/{id}");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<ProductModel>();
         }
 
         public async Task<ProductModel> AddProductAsync(ProductModel product)
         {
-            var response = await _restaurantHttpClient.PostAsync("Product", product);
+            var response = await _restaurantHttpClient.PostAsync("Products", product);
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<ProductModel>();
         }
 
         public async Task<ProductModel> UpdateProductAsync(ProductModel product)
         {
-            var response = await _restaurantHttpClient.PutAsync($"Product/{product.Id}", product);
+            var response = await _restaurantHttpClient.PutAsync($"Products/{product.Id}", product);
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<ProductModel>();
         }
 
         public async Task DeleteProductAsync(Guid id)
         {
-            var response = await _restaurantHttpClient.DeleteAsync($"Product/{id}");
+            var response = await _restaurantHttpClient.DeleteAsync($"Products/{id}");
             response.EnsureSuccessStatusCode();
         }
 

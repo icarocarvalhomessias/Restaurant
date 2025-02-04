@@ -4,27 +4,28 @@ namespace Restaurant.API.Models
 {
     public class Product
     {
-        public Guid Id { get; private set; }
-        public string Name { get; private set; }
-        public string Description { get; private set; }
-        public decimal Price { get; private set; }
-        public bool Active { get; private set; }
-        public DateTime RegisterDate { get; private set; }
-        public string Image { get; private set; }
-        public int Stock { get; private set; }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public decimal Price { get; set; }
+        public bool Active { get; set; }
+        public DateTime RegisterDate { get; set; }
+        public string Image { get; set; }
+        public int Stock { get; set; }
+        public ProductType Type { get; set; }
+
         [JsonIgnore]
-        public List<Order> Orders { get; set; } = new List<Order>();
+        public List<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
 
         public Product(string name, string description, decimal price, string image, int stock)
         {
-            Id = Guid.NewGuid();
             Name = name;
             Description = description;
             Price = price;
-            Active = true;
-            RegisterDate = DateTime.UtcNow;
             Image = image;
             Stock = stock;
+            RegisterDate = DateTime.UtcNow;
+            Active = true;
         }
 
         public void UpdateDetails(string name, string description, decimal price, string image, int stock)
@@ -40,15 +41,11 @@ namespace Restaurant.API.Models
         {
             Active = false;
         }
+    }
 
-        public void Activate()
-        {
-            Active = true;
-        }
-
-        public void UpdateStock(int stock)
-        {
-            Stock = stock;
-        }
+    public enum ProductType
+    {
+        Food,
+        Drink
     }
 }
