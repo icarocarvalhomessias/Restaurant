@@ -13,9 +13,9 @@ This is a system for a real restaurant, made available for study purposes. The p
   - Show the delivery person your deliveries
 
 - **REACT App**:
- - Display restaurant information.
- - Register Orders.
- - Register Products.
+  - Display restaurant information.
+  - Register Orders.
+  - Register Products.
 
 ## Technologies Used
 
