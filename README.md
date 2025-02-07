@@ -10,7 +10,12 @@ This is a system for a real restaurant, made available for study purposes. The p
 
 - **MAUI App**:
   - Display restaurant information.
-  - Register orders.
+  - Show the delivery person your deliveries
+
+- **REACT App**:
+ - Display restaurant information.
+ - Register Orders.
+ - Register Products.
 
 ## Technologies Used
 
@@ -28,6 +33,13 @@ This is a system for a real restaurant, made available for study purposes. The p
 - **MVVM**: Architecture pattern used in the app.
 - **HttpClient**: For API communication.
 - **XAML**: For building the user interface.
+
+### React app
+
+- **React**: The main library for building the user interface.
+- **Axios**: Library for making HTTP requests.
+- **React Router**: Library for managing routes within the application.
+- **Styled Components**: Library for styling components.
 
 ### Shared Components
 
@@ -81,6 +93,11 @@ Este é um sistema para um restaurante real, disponibilizado com o intuito de es
   - Exibição de informações do restaurante.
   - Cadastro de pedidos.
 
+- **REACT App**:
+ - Exibir informações do restaurante.
+ - Registro de Pedidos.
+ - Registro de Produtos.
+
 ## Tecnologias Utilizadas
 
 ### API de Restaurante
@@ -97,6 +114,13 @@ Este é um sistema para um restaurante real, disponibilizado com o intuito de es
 - **MVVM**: Padrão de arquitetura utilizado no aplicativo.
 - **HttpClient**: Para comunicação com a API.
 - **XAML**: Para construção da interface do usuário.
+
+### React App
+
+- **React**: Biblioteca principal para construção da interface de usuário.
+- **Axios**: Biblioteca para realizar requisições HTTP.
+- **React Router**: Biblioteca para gerenciamento de rotas na aplicação.
+- **Styled Components**: Biblioteca para estilização dos componentes.
 
 ### Componentes Compartilhados
 
