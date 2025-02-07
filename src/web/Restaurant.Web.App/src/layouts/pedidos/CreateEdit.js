@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Grid, Card, TextField } from "@mui/material";
+import { Grid, Card, TextField, Button } from "@mui/material";
 import { NotificationContext } from "context/NotificationContext";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
@@ -34,11 +34,20 @@ const CreateEdit = () => {
   const [tabValue, setTabValue] = useState(0);
 
   useEffect(() => {
-    const fetchOrderData = async () => {
+    
+    const fetchData = async () => {
+      const pedido = await getOrderById(id);
+      const products = await getProducts();
+      await fetchOrderData(pedido);
+      await fetchProductData(products, pedido);
+    };
+  
+
+    const fetchOrderData = async (pedido) => {
       if (id) {
         try {
-          const response = await getOrderById(id);
-          const { clientName, clientAddress, clientPhone, orderProducts, usuarioId } = response.data;
+          
+          const { clientName, clientAddress, clientPhone, orderProducts, usuarioId } = pedido.data;
           setOrderData({ clientName, clientAddress, clientPhone, orderProducts, usuarioId });
         } catch (error) {
           showNotification("error", "warning", "Erro", "Erro ao carregar dados do pedido.");
@@ -46,13 +55,12 @@ const CreateEdit = () => {
       }
     };
 
-    const fetchProductData = async () => {
+    const fetchProductData = async (products, pedido) => {
       try {
-        const productsResponse = await getProducts();
-
-        const productsWithQuantities = productsResponse.data.map(product => {
+        var ordedeProducts = pedido.data.orderProducts;
+        const productsWithQuantities = products.data.map(product => {
           
-          const orderProduct = orderData.orderProducts.find(p => p.productId === product.id);
+          const orderProduct = ordedeProducts.find(p => p.productId === product.id);
           
           return {
             ...product,
@@ -67,8 +75,7 @@ const CreateEdit = () => {
       }
     };
 
-    fetchOrderData();
-    fetchProductData();
+    fetchData();
   }, [id, showNotification]);
 
   const handleSetTabValue = (event, newValue) => {
@@ -152,13 +159,13 @@ const CreateEdit = () => {
                       <ProductTabs
                         productTypes={productTypes}
                         products={products}
-                        tabValue={tabValue}
-                        handleSetTabValue={handleSetTabValue}
                         handleProductChange={handleProductChange}
                       />
                     </Grid>
-                    <Grid item xs={12}>
-                      <button type="submit">Salvar Pedido</button>
+                    <Grid item xs={12} style={{ textAlign: 'left' }}>
+                      <Button variant="contained" style={{ backgroundColor: 'black', color: 'white' }} type="submit">
+                        Salvar Pedido
+                      </Button>
                     </Grid>
                   </Grid>
                 </form>
