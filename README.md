@@ -51,7 +51,7 @@ This is a system for a real restaurant, made available for study purposes. The p
 - **Restaurant.Mobile.App**: Project for the MAUI app.
 - **Restaurant.WebApi.Core**: Shared components between the API and the app.
 
-## How to Run
+## How to Run (Not Avaliable yet.)
 
 ### Restaurant API
 
